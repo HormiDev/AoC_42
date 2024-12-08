@@ -6,7 +6,7 @@
 /*   By: ide-dieg <ide-dieg@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 03:09:23 by ide-dieg          #+#    #+#             */
-/*   Updated: 2024/12/08 05:23:39 by ide-dieg         ###   ########.fr       */
+/*   Updated: 2024/12/08 12:48:15 by ide-dieg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	iter_operators(int *operators, int len)
 	i = len - 1;
 	while (i >= 0)
 	{
-		if (operators[i] >= 1)
+		if (operators[i] >= 2)
 		{
 			operators[i] = 0;
 			i--;
@@ -96,7 +96,7 @@ int check_operators(int *operators, int len)
 	i = 0;
 	while (i < len)
 	{
-		if (operators[i] < 1)
+		if (operators[i] < 2)
 			return (0);
 		i++;
 	}
@@ -115,7 +115,7 @@ void	ft_print_operators(int *operators, int len)
 		else if (operators[i] == 1)
 			ft_printf(" * ");
 		else if (operators[i] == 2)
-			ft_printf(" # ");
+			ft_printf(" || ");
 		i++;
 	}
 	ft_printf("\n");
@@ -126,6 +126,9 @@ int check_factors(int *factors, int len, long result)
 	long	tmp;
 	int		*operators;
 	int 	i;
+	char 	*str1;
+	char 	*str2;
+	char 	*strcat;
 
 	operators = malloc(sizeof(int) * (len - 1));
 	i = 0;
@@ -136,7 +139,7 @@ int check_factors(int *factors, int len, long result)
 	}
 	while (0 == 0)
 	{
-		//ft_print_operators(operators, len);
+		//ft_print_operators(operators, len - 1);
 		i = 1;
 		tmp = factors[0];
 		while (i < len)
@@ -145,6 +148,16 @@ int check_factors(int *factors, int len, long result)
 				tmp += factors[i];
 			else if (operators[i - 1] == 1)
 				tmp *= factors[i];
+			else if (operators[i - 1] == 2)
+			{
+				str1 = ft_ltoa(tmp);
+				str2 = ft_ltoa(factors[i]);
+				strcat = ft_strjoin(str1, str2);
+				tmp = ft_atol(strcat);
+				free(str1);
+				free(str2);
+				free(strcat);
+			}
 			i++;
 		}
 		if (tmp == result)
@@ -152,14 +165,6 @@ int check_factors(int *factors, int len, long result)
 			free(operators);
 			//ft_printf("Result: %d\n", result);
 			return (1);
-		}
-		else
-		{
-			if (check_cat(result, factors, len, operators))
-			{
-				free(operators);
-				return (1);
-			}
 		}
 		if (check_operators(operators, len - 1))
 			break ;

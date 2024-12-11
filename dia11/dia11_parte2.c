@@ -6,11 +6,14 @@
 /*   By: ide-dieg <ide-dieg@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:31:59 by ide-dieg          #+#    #+#             */
-/*   Updated: 2024/12/11 19:38:13 by ide-dieg         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:06:45 by ide-dieg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../42_Libft/libft.h"
+# include <stdio.h>
+
+int contador;
 
 void	blinking(t_list_dbl *lst)
 {
@@ -65,8 +68,8 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 	int 		j;
 	int			k;
 
-	ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
-	print_list(lst_stones);
+	//ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
+	//print_list(lst_stones);
 	k = 0;
 	while (k < 25 && i < max_blinkings)
 	{
@@ -75,7 +78,7 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 		lst_stones = ft_list_dbl_get_first(lst_stones);
 		i++;
 		k++;
-		ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
+		//ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
 	}
 	if (i < max_blinkings)
 	{
@@ -95,7 +98,7 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 	}
 	else
 		result = ft_list_dbl_size(lst_stones);
-	ft_printf("result: %ld\n", result);
+	printf("contador: %d result: %ld\n", contador++, result);
 	ft_list_dbl_clear(&lst_stones, free);
 	return (result);
 }
@@ -124,7 +127,7 @@ int main(int argc, char **argv)
 
 	i = 0;
 	result = root(lst_stones, i, blinkings);
-	ft_printf("Final result: %ld\n", result);
+	printf("Final result: %ld\n", result);
 	free(split);
 
 	return (0);

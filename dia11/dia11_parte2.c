@@ -6,7 +6,7 @@
 /*   By: ide-dieg <ide-dieg@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:31:59 by ide-dieg          #+#    #+#             */
-/*   Updated: 2024/12/11 16:34:17 by ide-dieg         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:49:30 by ide-dieg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	blinking(t_list_dbl *lst)
 			free(str);
 			str = (char *)tmp->content;
 			tmp->content = ft_ltoa(ft_atol(str));
+			free(str);
 		}
 		else
 		{
 			tmp->content = ft_ltoa(ft_atol(str) * 2024);
 			free(str);
 		}
-			
 		tmp = tmp->next;
 	}
 }
@@ -57,12 +57,18 @@ void print_list(t_list_dbl *lst)
 	ft_printf("\n");
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	char	*str = "9759 0 256219 60 1175776 113 6 92833";
 	char	**split = ft_split(str, ' ');
 	t_list_dbl	*lst_stones = NULL;
 	int		i = 0;
+	
+	if (argc != 3)
+	{
+		ft_printf("usage: %s <stones> <blinks>\n", argv[0]);
+		return (1);
+	}
 
 	while (split[i] != NULL)
 	{
@@ -72,7 +78,7 @@ int main()
 	i = 0;
 	ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
 	print_list(lst_stones);
-	while (i < 75)
+	while (i < 25)
 	{
 		
 		blinking(lst_stones);

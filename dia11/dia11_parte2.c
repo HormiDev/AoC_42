@@ -6,7 +6,7 @@
 /*   By: ide-dieg <ide-dieg@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:31:59 by ide-dieg          #+#    #+#             */
-/*   Updated: 2024/12/12 15:03:22 by ide-dieg         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:53:20 by ide-dieg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ void print_list(t_list_dbl *lst)
 	ft_printf("\n");
 }
 
-int root(t_list_dbl *lst_stones, int i, int max_blinkings)
+long root(t_list_dbl *lst_stones, int i, int max_blinkings, long **pre_calculated)
 {
-	long		result = 0;
+	long	result = 0;
 	t_list_dbl *lst_root = NULL;
 	t_list_dbl *tmp;
 	int 		j;
 	int			k;
+	int 		pre_num;
 
 	//ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
 	//print_list(lst_stones);
@@ -92,8 +93,23 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 				tmp = tmp->next;
 				j++;
 			}
-			result += root(lst_root, i, max_blinkings);
-			if (i == 25 || i == 50)
+			if (ft_strlen_p((char *)lst_root->content) == 1)
+			{
+				pre_num = ft_atoi((char *)lst_root->content);
+				if (pre_calculated[pre_num][i] != 0)
+				{
+					result += pre_calculated[pre_num][i];
+					ft_list_dbl_clear(&lst_root, free);
+				}
+				else
+				{
+					pre_calculated[pre_num][i] = root(lst_root, i, max_blinkings, pre_calculated);
+					result += pre_calculated[pre_num][i];
+				}
+			}
+			else
+				result += root(lst_root, i, max_blinkings, pre_calculated);
+			if (i == 25)
 				printf("contador: %d result: %ld\n", contador++, result);
 			lst_root = NULL;
 		}
@@ -112,14 +128,24 @@ int main(int argc, char **argv)
 	int			i;
 	int			blinkings;
 	long		result;
+	long		**pre_calculated;
 	
 	if (argc != 3)
 	{
-		ft_printf("usage: %s <stones> <blinks>\n", argv[0]);
+		ft_printf("usage: %s \"stones\" <blinks>\n", argv[0]);
 		return (1);
-	};
+	}
 	split = ft_split(argv[1], ' ');
 	blinkings = ft_atoi(argv[2]);
+
+	pre_calculated = (long **)malloc(sizeof(long *) * 10);
+	i = 0;
+	while (i < 10)
+	{
+		pre_calculated[i] = ft_calloc(blinkings, sizeof(long));
+		i++;
+	}
+
 	i = 0;
 	while (split[i] != NULL)
 	{
@@ -128,9 +154,15 @@ int main(int argc, char **argv)
 	}
 
 	i = 0;
-	result = root(lst_stones, i, blinkings);
+	result = root(lst_stones, i, blinkings, pre_calculated);
 	printf("Final result: %ld\n", result);
 	free(split);
-
+	i = 0;
+	while (i < 10)
+	{
+		free(pre_calculated[i]);
+		i++;
+	}
+	free(pre_calculated);
 	return (0);
 }

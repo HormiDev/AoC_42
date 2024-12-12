@@ -6,7 +6,7 @@
 /*   By: ide-dieg <ide-dieg@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:31:59 by ide-dieg          #+#    #+#             */
-/*   Updated: 2024/12/12 15:03:22 by ide-dieg         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:06:45 by ide-dieg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 	//ft_printf("blinking %d stones: %d\n", i, ft_list_dbl_size(lst_stones));
 	//print_list(lst_stones);
 	k = 0;
-	while (k < 1 && i < max_blinkings)
+	while (k < 25 && i < max_blinkings)
 	{
 		
 		blinking(lst_stones);
@@ -86,21 +86,19 @@ int root(t_list_dbl *lst_stones, int i, int max_blinkings)
 		while (tmp != NULL)
 		{
 			j = 0;
-			while (tmp != NULL && j < 1)
+			while (tmp != NULL && j < 8)
 			{
 				ft_list_dbl_addnew_back(&lst_root, ft_strdup_p((char *)tmp->content));
 				tmp = tmp->next;
 				j++;
 			}
 			result += root(lst_root, i, max_blinkings);
-			if (i == 25 || i == 50)
-				printf("contador: %d result: %ld\n", contador++, result);
 			lst_root = NULL;
 		}
 	}
 	else
 		result = ft_list_dbl_size(lst_stones);
-	//printf("contador: %d result: %ld\n", contador++, result);
+	printf("contador: %d result: %ld\n", contador++, result);
 	ft_list_dbl_clear(&lst_stones, free);
 	return (result);
 }
